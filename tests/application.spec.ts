@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
 const userData = {
   username: 'username',
@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
   // await page.goto('http://localhost:8080');
 });
 
-const fillByLabel = async (page, labelText, value) => {
+const fillByLabel = async (page: Page, labelText: string, value: string) => {
   const input = page.getByLabel(labelText);
   await input.fill(value);
 };
@@ -35,7 +35,7 @@ test('Register positive', async ({ page }) => {
     `Добро пожаловать, ${userData.username}`
   );
   await expect(successMessage).toBeVisible();
-  await expect(page).toHaveScreenshot('register-positive.png');
+  await expect(page).toHaveScreenshot();
   // END
 });
 
@@ -67,6 +67,6 @@ test('Register negative', async ({ page }) => {
   await expect(page.locator('#confirmPasswordError')).toBeVisible();
 
   // скриншот всей формы с ошибками
-  await expect(page).toHaveScreenshot('register-negative.png');
+  await expect(page).toHaveScreenshot();
   // END
 });
