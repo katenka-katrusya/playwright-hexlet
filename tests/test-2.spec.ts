@@ -1,14 +1,15 @@
 import { test, expect } from '@playwright/test';
+import TodoMVCPage from '../models/TodoMVCPage';
 
 test('adding a task', async ({ page }) => {
-  await page.goto('https://demo.playwright.dev/todomvc/#/');
+  const todoMvcPage = new TodoMVCPage(page);
+  await todoMvcPage.goto();
 
-  const input = page.getByRole('textbox', { name: 'What needs to be done?' });
-  await input.fill('Hello Hexlet');
-  await input.press('Enter');
-  await input.fill('Learning something new');
-  await input.press('Enter');
+  await todoMvcPage.addTodo('Hello Hexlet');
+  await todoMvcPage.addTodo('Learning something new');
 
-  await expect(page.getByText('Hello Hexlet')).toBeVisible();
-  await expect(page.getByText('Learning something new')).toBeVisible();
+  await expect(todoMvcPage.getTaskItemByName('Hello Hexlet')).toBeVisible();
+  await expect(
+    todoMvcPage.getTaskItemByName('Learning something new')
+  ).toBeVisible();
 });
