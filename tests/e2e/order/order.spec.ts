@@ -1,17 +1,18 @@
 import { test, expect } from '@playwright/test';
 import { fillByLabel, userData } from '../../utils.js';
+import { request } from 'http';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(
-    'https://web-js-playwright-test-structure-8751116.evaluator1-8.hexlet.io/?',
-    { waitUntil: 'domcontentloaded' }
-  );
+  await request.post('/api/reset');
+  await page.goto('/');
 
-  // sign in
+  // sign up
   await page.getByRole('button', { name: 'Войти' }).click();
-  await fillByLabel(page, 'Ваш логин', userData.username);
-  await fillByLabel(page, 'Пароль', userData.password);
-  await page.getByRole('button', { name: 'Отправить' }).click();
+  await page.getByRole('link', { name: 'Регистрация' }).click();
+  await fillByLabel(page, 'Логин пользователя', userData.username);
+  await fillByLabel(page, `${/^Пароль$/}`, userData.password);
+  await fillByLabel(page, 'Подтвердите пароль', userData.password);
+  await page.getByRole('button', { name: 'Зарегистрироваться' }).click();
 });
 
 test.afterEach(async ({ page }) => {
